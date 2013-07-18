@@ -3,7 +3,7 @@ PATH
   specs:
     blacklight_oai_provider (0.1.0)
       blacklight (~> 3.2)
-      rails (~> 3.0)
+      rails (~> 4.2)
 
 GEM
   remote: http://rubygems.org/
