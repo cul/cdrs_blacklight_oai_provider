@@ -11,6 +11,9 @@ module BlacklightOaiProvider::ControllerExtension
   # Used when we need a second Solr query to get range facets, after the
   # first found min/max from result set. 
   def oai
+
+  self.solr_search_params_logic += [:add_date_range_param]
+
     options = params.delete_if { |k,v| %w{controller action}.include?(k) }
     render :text => oai_provider.process_request(options).gsub('<?xml version="1.0" encoding="UTF-8"?>', "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<?xml-stylesheet type=\"text/xsl\" href=\"#{ ActionController::Base.helpers.asset_path('oai2.xsl')}\" ?>"), :content_type => 'text/xml'
   end
@@ -26,4 +29,10 @@ module BlacklightOaiProvider::ControllerExtension
   def oai_provider
     @oai_provider ||= BlacklightOaiProvider::SolrDocumentProvider.new(self, oai_config)
   end
+
+  def add_date_range_param(solr_parameters, user_parameters)
+        solr_parameters[:fq] =  "record_creation_date: [#{user_parameters[:from]} TO #{user_parameters[:until]}]"
+  end
+
+
 end
