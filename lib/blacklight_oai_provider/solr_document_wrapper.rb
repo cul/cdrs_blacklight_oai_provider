@@ -16,11 +16,15 @@ module BlacklightOaiProvider
     end
 
     def earliest
-      Time.parse @controller.get_search_results(@controller.params, {:fl => @timestamp_field, :sort => @timestamp_field +' asc', :rows => 1}).last.first.get(@timestamp_field)
+      records = @controller.get_search_results(@controller.params, {:fl => @timestamp_field, :sort => @timestamp_field +' asc', :rows => 1})
+      raise OAI::NoMatchException.new if records[1].nil? or records[1].empty?
+      Time.parse records.last.first.get(@timestamp_field)
     end
 
     def latest
-      Time.parse @controller.get_search_results(@controller.params, {:fl => @timestamp_field, :sort => @timestamp_field +' desc', :rows => 1}).last.first.get(@timestamp_field)
+      records = @controller.get_search_results(@controller.params, {:fl => @timestamp_field, :sort => @timestamp_field +' desc', :rows => 1})
+      raise OAI::NoMatchException.new if records[1].nil? or records[1].empty?
+      Time.parse records.last.first.get(@timestamp_field)
     end
 
     def find(selector, options={})
