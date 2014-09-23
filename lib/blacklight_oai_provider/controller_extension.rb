@@ -31,7 +31,17 @@ module BlacklightOaiProvider::ControllerExtension
   end
 
   def add_date_range_param(solr_parameters, user_parameters)
-        solr_parameters[:fq] =  "record_creation_date: [#{user_parameters[:from]} TO #{user_parameters[:until]}]"
+
+      if(user_parameters[:from].nil?)
+	    user_parameters[:from] = "0001-01-01T00:00:00Z"
+      end
+
+      if(user_parameters[:until].nil?)
+        user_parameters[:until] = '*'
+      end
+
+           solr_parameters[:fq] =  "record_creation_date: [#{user_parameters[:from]} TO #{user_parameters[:until]}]"
+
   end
 
 
