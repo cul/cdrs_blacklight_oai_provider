@@ -528,6 +528,7 @@ p.intro {
 <!-- oai resumptionToken -->
 
 <xsl:template match="oai:resumptionToken">
+<xsl:if test="not(. = '')">
    <p>There are more results.</p>
    <table class="values">
      <tr><td class="key">resumptionToken:</td>
@@ -535,6 +536,7 @@ p.intro {
 <xsl:text> </xsl:text>
 <a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
    </table>
+</xsl:if>
 </xsl:template>
 
 <!-- unknown metadata format -->

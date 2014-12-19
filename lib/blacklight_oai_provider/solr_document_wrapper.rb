@@ -2,6 +2,7 @@ module BlacklightOaiProvider
   class SolrDocumentWrapper < ::OAI::Provider::Model
     attr_reader :model, :timestamp_field
     attr_accessor :options
+
     def initialize(controller, options = {})
       @controller = controller
 
@@ -47,7 +48,15 @@ module BlacklightOaiProvider
 
       raise ::OAI::ResumptionTokenException.new unless records
 
-      OAI::Provider::PartialResult.new(records, token.next(token.last+@limit))
+
+      next_token = token.next(token.last+@limit)
+
+      #if the results are lower than the page display limit, then were are at the end of our results and sould send an empty resumption token
+      if(records.size < @limit)
+       next_token = OAI::Provider::ResumptionToken.new(options.merge({:last => ''}))       
+      end
+
+      OAI::Provider::PartialResult.new(records, next_token)
     end
 
     def next_set(token_string)
