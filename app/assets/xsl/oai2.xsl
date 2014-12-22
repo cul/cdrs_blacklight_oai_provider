@@ -534,7 +534,10 @@ p.intro {
      <tr><td class="key">resumptionToken:</td>
      <td class="value"><xsl:value-of select="."/>
 <xsl:text> </xsl:text>
-<a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
+<xsl:variable name="verb"> 
+  <xsl:if test="/oai:OAI-PMH/oai:ListRecords">ListRecords</xsl:if>
+</xsl:variable>
+<a class="link" href="?verb={$verb}&amp;resumptionToken={.}">Resume</a></td></tr>
    </table>
 </xsl:if>
 </xsl:template>
